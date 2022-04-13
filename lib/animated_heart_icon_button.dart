@@ -80,6 +80,11 @@ class _AnimatedHeartIconButtonState extends State<AnimatedHeartIconButton>
         curve: Curves.easeIn,
       ),
     ));
+    if (widget.isFavourite) {
+      _controller.value = 1;
+    } else {
+      _controller.value = 0;
+    }
   }
 
   @override
