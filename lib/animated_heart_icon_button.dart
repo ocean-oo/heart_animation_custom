@@ -6,12 +6,11 @@ class AnimatedHeartIconButton extends StatefulWidget {
   /// цвет [favouriteColor] и анимация увеличения на заданый процент
   /// [scalePercentage] и возвращение в исходное состояние
   ///
-  /// Аргумент [isFavourite] не должен быть null,
-  /// аргумент [onTap]  не должен быть null.
+  /// Аргумент [isFavourite] не должен быть null
   const AnimatedHeartIconButton({
     Key? key,
     required this.isFavourite,
-    required this.onTap,
+    this.onTap,
     this.size = 25.0,
     this.favouriteColor = Colors.red,
     this.notFavouriteColor = Colors.transparent,
@@ -24,7 +23,7 @@ class AnimatedHeartIconButton extends StatefulWidget {
   }) : super(key: key);
 
   final bool isFavourite;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final Color favouriteColor;
   final Color notFavouriteColor;
   final Color outlineColor;
