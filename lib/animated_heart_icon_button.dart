@@ -11,7 +11,7 @@ class AnimatedHeartIconButton extends StatefulWidget {
     Key? key,
     required this.isFavourite,
     this.onTap,
-    this.size = 25.0,
+    this.size = 24.0,
     this.favouriteColor = Colors.red,
     this.notFavouriteColor = Colors.transparent,
     this.outlineColor = Colors.white,
@@ -150,7 +150,18 @@ class HeartPainter extends CustomPainter {
     double width = size.width;
     double height = size.height;
 
-    final Path path = Path()
+    final Path heartLineArc = Path()
+      ..moveTo(0.5 * width, height)
+      ..lineTo(width * 0.06, height * 0.45)
+      ..arcToPoint(Offset(0.5 * width, height * 0.12),
+          radius: Radius.circular(1))
+      ..moveTo(0.5 * width, height)
+      ..lineTo(width * 0.94, height * 0.45)
+      ..arcToPoint(Offset(0.5 * width, height * 0.12),
+          radius: Radius.circular(1), clockwise: false);
+
+    //вариант более гладкого сердечка
+    final Path heartCubic = Path()
       ..moveTo(0.5 * width, height)
       ..cubicTo(-0.45 * width, height * 0.5, 0.2 * width, height * -0.4,
           0.5 * width, height * 0.3)
@@ -159,8 +170,8 @@ class HeartPainter extends CustomPainter {
           0.5 * width, height * 0.3);
 
     canvas
-      ..drawPath(path, body)
-      ..drawPath(path, border);
+      ..drawPath(heartLineArc, body)
+      ..drawPath(heartLineArc, border);
   }
 
   @override
