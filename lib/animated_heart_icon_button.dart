@@ -152,10 +152,10 @@ class HeartPainter extends CustomPainter {
 
     final Path path = Path()
       ..moveTo(0.5 * width, height)
-      ..cubicTo(-0.45 * width, height * 0.6, 0.2 * width, height * -0.4,
+      ..cubicTo(-0.45 * width, height * 0.5, 0.2 * width, height * -0.4,
           0.5 * width, height * 0.3)
       ..moveTo(0.5 * width, height)
-      ..cubicTo(1.45 * width, height * 0.6, 0.8 * width, height * -0.4,
+      ..cubicTo(1.45 * width, height * 0.5, 0.8 * width, height * -0.4,
           0.5 * width, height * 0.3);
 
     canvas
