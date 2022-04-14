@@ -141,6 +141,7 @@ class HeartPainter extends CustomPainter {
     Paint border = Paint()
       ..color = outlineColor
       ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
       ..strokeWidth = outlineWidth;
 
     Paint body = Paint()
