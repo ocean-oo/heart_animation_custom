@@ -80,10 +80,23 @@ class _AnimatedHeartIconButtonState extends State<AnimatedHeartIconButton>
         curve: Curves.easeIn,
       ),
     ));
+
+    //set initial animation position
     if (widget.isFavourite) {
       _controller.value = 1;
     } else {
       _controller.value = 0;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant AnimatedHeartIconButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isFavourite == widget.isFavourite) return;
+    if (widget.isFavourite) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
     }
   }
 
@@ -95,34 +108,63 @@ class _AnimatedHeartIconButtonState extends State<AnimatedHeartIconButton>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isFavourite) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
-    }
     return GestureDetector(
       onTap: widget.onTap,
-      child: AnimatedBuilder(
-          animation: _controller,
-          builder: (_, __) {
-            return SizedBox(
-              width: widget.size,
-              height: widget.size,
-              child: Transform.scale(
-                scale: _sizeAnimation.value,
-                child: CustomPaint(
-                  painter: HeartPainter(
-                    fillColor: widget.isFavourite
-                        ? _colorForwardAnimation.value
-                        : _colorReverseAnimation.value,
-                    outlineColor: widget.outlineColor,
-                    outlineWidth: widget.outlineWidth,
-                  ),
-                ),
-              ),
-            );
-          }),
+      child: AnimatedHeart(
+        controller: _controller,
+        sizeAnimation: _sizeAnimation,
+        colorForwardAnimation: _colorForwardAnimation,
+        colorReverseAnimation: _colorReverseAnimation,
+        outlineColor: widget.outlineColor,
+        outlineWidth: widget.outlineWidth,
+        size: Size.square(widget.size),
+        isFavourite: widget.isFavourite,
+      ),
     );
+  }
+}
+
+class AnimatedHeart extends StatelessWidget {
+  const AnimatedHeart({
+    Key? key,
+    required this.controller,
+    required this.sizeAnimation,
+    required this.colorForwardAnimation,
+    required this.colorReverseAnimation,
+    required this.size,
+    required this.isFavourite,
+    required this.outlineColor,
+    required this.outlineWidth,
+  }) : super(key: key);
+
+  final AnimationController controller;
+  final Animation sizeAnimation;
+  final Animation colorForwardAnimation;
+  final Animation colorReverseAnimation;
+  final Size size;
+  final bool isFavourite;
+  final Color outlineColor;
+  final double outlineWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+        animation: controller,
+        builder: (_, __) {
+          return Transform.scale(
+            scale: sizeAnimation.value,
+            child: CustomPaint(
+              size: size,
+              painter: HeartPainter(
+                fillColor: isFavourite
+                    ? colorForwardAnimation.value
+                    : colorReverseAnimation.value,
+                outlineColor: outlineColor,
+                outlineWidth: outlineWidth,
+              ),
+            ),
+          );
+        });
   }
 }
 
@@ -151,15 +193,16 @@ class HeartPainter extends CustomPainter {
     double width = size.width;
     double height = size.height;
 
+    //рисуем сердечко из линий и дуг
     final Path heartLineArc = Path()
       ..moveTo(0.5 * width, height)
       ..lineTo(width * 0.06, height * 0.45)
       ..arcToPoint(Offset(0.5 * width, height * 0.12),
-          radius: Radius.circular(1))
+          radius: const Radius.circular(1))
       ..moveTo(0.5 * width, height)
       ..lineTo(width * 0.94, height * 0.45)
       ..arcToPoint(Offset(0.5 * width, height * 0.12),
-          radius: Radius.circular(1), clockwise: false);
+          radius: const Radius.circular(1), clockwise: false);
 
     //вариант более гладкого сердечка
     final Path heartCubic = Path()
@@ -176,5 +219,6 @@ class HeartPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
+  bool shouldRepaint(HeartPainter oldDelegate) =>
+      oldDelegate.fillColor != fillColor;
 }
